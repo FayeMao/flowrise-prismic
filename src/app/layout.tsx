@@ -3,6 +3,8 @@ import { Nunito, Nunito_Sans } from 'next/font/google'
 import './globals.css'
 import clsx from 'clsx'
 import { createClient } from '@/prismicio';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 
 const nunito = Nunito({
@@ -21,13 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const client = createClient();
 
   // Client is how to fetch data from prismic
-  const page = await client.getSingle("settings");
+  const settings = await client.getSingle("settings");
 
   return {
-    title: page.data.site_title || "Flowrise", // Fallback is there to know if something went wrong
-    description: page.data.meta_description || "Flowrise is the relaxing app for you.", // Good practice, in case there is no content
+    title: settings.data.site_title || "Flowrise", // Fallback is there to know if something went wrong
+    description: settings.data.meta_description || "Flowrise is the relaxing app for you.", // Good practice, in case there is no content
     openGraph: {
-      images: [page.data.og_image.url || ""],
+      images: [settings.data.og_image.url || ""],
     },
   }
 }
@@ -42,10 +44,9 @@ export default function RootLayout({
       <body>
         {/* Wrap children in-between header and footer */}
 
-        <header>Header!</header>
+        <Header />
         {children}
-        <footer>Footer!</footer>
-        
+        <Footer />        
         </body>
     </html>
   )
